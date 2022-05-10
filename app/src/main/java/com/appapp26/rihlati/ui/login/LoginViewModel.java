@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
+import com.appapp26.rihlati.Db.DatabaseHelper;
 import com.appapp26.rihlati.data.LoginRepository;
 import com.appapp26.rihlati.data.Result;
 import com.appapp26.rihlati.data.model.LoggedInUser;
 import com.appapp26.rihlati.R;
 
 public class LoginViewModel extends ViewModel {
-
+private DatabaseHelper db;
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
@@ -31,9 +32,11 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
+        db =  DatabaseHelper.getInstance(null,null,null,1);
+
         Result<LoggedInUser> result = loginRepository.login(username, password);
 
-        if (result instanceof Result.Success) {
+        if (db.checkUser(username, password)) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {

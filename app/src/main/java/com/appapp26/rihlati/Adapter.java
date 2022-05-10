@@ -1,60 +1,72 @@
 package com.appapp26.rihlati;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appapp26.rihlati.databinding.BusCardBinding;
+
 import java.util.ArrayList;
+import java.util.List;
 
 class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
-    private ArrayList<Trip> list = new ArrayList();
+    private List<Trip> trips;
 
-    public void addItems( ArrayList<Trip> list){
-        this.list = list;
+    public CardAdapter(List<Trip> trips){
+        this.trips=trips;
     }
 
-    public void cardClick(View view){
-       System.out.println("hello card");
+    public void cardClick(){
+
+
+
+
 
     }
     @NonNull
     @Override
     public CardAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.bus_card,parent,false)) ;
+        LayoutInflater layoutInflater= LayoutInflater.from(parent.getContext());
+        BusCardBinding busCardBinding= BusCardBinding.inflate(layoutInflater,parent,false);
+        return  new ViewHolder(busCardBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CardAdapter.ViewHolder holder, int position) {
-         holder.bind(list.get(position));
+       Trip trip = trips.get(position);
+       holder.busCardBinding.executePendingBindings();
+       holder.busCardBinding.setTrip(trip);
     }
 
     @Override
     public int getItemCount() {
-        return this.list.size();
+        return this.trips.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-         TextView from = itemView.findViewById(R.id.from);
-         TextView to = itemView.findViewById(R.id.to);
-         TextView time = itemView.findViewById(R.id.time);
-         TextView avP = itemView.findViewById(R.id.places);
+        BusCardBinding busCardBinding;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
+
+        public ViewHolder(@NonNull BusCardBinding busCardBinding) {
+            super(busCardBinding.getRoot());
+            busCardBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Trip trip=busCardBinding.getTrip();
+
+                }
+            });
+            this.busCardBinding=busCardBinding;
+        }
+        void  vv(){
+
         }
 
-        @SuppressLint("SetTextI18n")
-        public void bind(Trip trip){
-       from.setText("Eloued");
-       to.setText(trip.distination);
-       time.setText(trip.time);
-       avP.setText(trip.av_places);
-        }
     }
 }

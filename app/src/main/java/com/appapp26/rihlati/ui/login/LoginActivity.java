@@ -23,15 +23,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appapp26.rihlati.Db.DatabaseHelper;
 import com.appapp26.rihlati.MainActivity;
 import com.appapp26.rihlati.R;
 import com.appapp26.rihlati.TripInfo;
+import com.appapp26.rihlati.User;
 import com.appapp26.rihlati.ui.login.LoginViewModel;
 import com.appapp26.rihlati.ui.login.LoginViewModelFactory;
 import com.appapp26.rihlati.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
-
+    private DatabaseHelper db;
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
     private Button glbtn;
@@ -39,7 +41,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db =  DatabaseHelper.getInstance(getApplicationContext(),null,null,1);
+        db.createUser(new User("aymen","123456",1));
+        db.createUser(new User("vemo","123456",0));
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
